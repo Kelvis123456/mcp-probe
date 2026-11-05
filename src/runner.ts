@@ -44,6 +44,9 @@ function checkExpect(call: CallSpec, out: CallOutcome): string | undefined {
   if (text?.contains !== undefined && !out.text.includes(text.contains)) {
     return `text does not contain ${JSON.stringify(text.contains)} (got ${JSON.stringify(out.text)})`;
   }
+  // The pattern comes from the probe file the user runs on their own machine, the same
+  // trust level as the server command in that file, so ReDoS here is not an attack surface.
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   if (text?.matches !== undefined && !new RegExp(text.matches).test(out.text)) {
     return `text does not match /${text.matches}/ (got ${JSON.stringify(out.text)})`;
   }
