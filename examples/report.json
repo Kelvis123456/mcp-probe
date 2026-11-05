@@ -1,0 +1,57 @@
+[
+  {
+    "name": "initialize handshake",
+    "ok": true,
+    "ms": 475
+  },
+  {
+    "name": "tools/list answers",
+    "ok": true,
+    "ms": 22
+  },
+  {
+    "name": "every tool has a description and an object input schema",
+    "ok": true,
+    "ms": 0
+  },
+  {
+    "name": "required tools exist (echo, get-sum, get-structured-content)",
+    "ok": true,
+    "ms": 0
+  },
+  {
+    "name": "unknown tool is rejected, not ignored",
+    "ok": true,
+    "ms": 4
+  },
+  {
+    "name": "call: echo returns the message",
+    "ok": true,
+    "ms": 4
+  },
+  {
+    "name": "call: get-sum adds two numbers",
+    "ok": true,
+    "ms": 3
+  },
+  {
+    "name": "call: get-sum rejects a string for a number",
+    "ok": true,
+    "ms": 2
+  },
+  {
+    "name": "call: echo without its required argument fails",
+    "ok": true,
+    "ms": 1
+  },
+  {
+    "name": "call: get-structured-content rejects an unknown location",
+    "ok": true,
+    "ms": 2
+  },
+  {
+    "name": "server still responds after all calls",
+    "ok": true,
+    "ms": 2
+  }
+]

@@ -1,0 +1,35 @@
+# Probe for the official reference server (@modelcontextprotocol/server-everything, pinned in examples/package.json).
+# Run from the repo root: node dist/cli.js examples/everything.probe.yaml
+server:
+  command: node
+  args: [examples/node_modules/@modelcontextprotocol/server-everything/dist/index.js, stdio]
+  timeoutMs: 8000
+
+tools:
+  require: [echo, get-sum, get-structured-content]
+
+calls:
+  - name: echo returns the message
+    tool: echo
+    args: { message: hello }
+    expect: { equals: "Echo: hello" }
+
+  - name: get-sum adds two numbers
+    tool: get-sum
+    args: { a: 40, b: 2 }
+    expect: { text: { contains: "42" } }
+
+  - name: get-sum rejects a string for a number
+    tool: get-sum
+    args: { a: "forty", b: 2 }
+    expect: { error: true }
+
+  - name: echo without its required argument fails
+    tool: echo
+    args: {}
+    expect: { error: true }
+
+  - name: get-structured-content rejects an unknown location
+    tool: get-structured-content
+    args: { location: Atlantis }
+    expect: { error: true }
