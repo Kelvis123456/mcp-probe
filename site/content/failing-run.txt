@@ -1,0 +1,14 @@
+PASS  initialize handshake (1027 ms)
+PASS  tools/list answers (42 ms)
+PASS  every tool has a description and an object input schema (0 ms)
+PASS  required tools exist (echo, get-sum, get-structured-content) (0 ms)
+PASS  unknown tool is rejected, not ignored (7 ms)
+FAIL  call: echo returns the message (9 ms)
+      text differs from golden (expected "Hello: hello", got "Echo: hello")
+PASS  call: get-sum adds two numbers (3 ms)
+PASS  call: get-sum rejects a string for a number (2 ms)
+PASS  call: echo without its required argument fails (2 ms)
+PASS  call: get-structured-content rejects an unknown location (2 ms)
+PASS  server still responds after all calls (2 ms)
+
+1 of 11 checks failed
