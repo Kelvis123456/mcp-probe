@@ -17,7 +17,10 @@ const jsonLd = {
 
 const always = [
   ["initialize", "The handshake completes within the timeout."],
-  ["tools/list", "The server answers it."],
+  [
+    "tools/list",
+    "The server answers it. Pagination is followed, up to 100 pages. If it fails, the checks that need the list fail too instead of passing on an empty one.",
+  ],
   ["tool metadata", "Every tool has a non-empty description and an input schema of type object."],
   ["unknown tool", "Calling a tool that does not exist fails instead of being accepted."],
   ["ping", "The server still answers after all the calls have run."],
@@ -27,14 +30,26 @@ const fromFile = [
   ["require", "The tools you list exist."],
   [
     "calls",
-    "Each call succeeds or fails, as you declare. Optionally its first text block must contain a string, match a regex, or equal a golden value.",
+    "Each call succeeds or fails, as you declare. Optionally its first text block must contain a string, match a regex, or equal a golden value. A call to a tool that is not in tools/list fails whatever you expect, so a typo cannot pass as an expected error. If the result has no text block, equals, contains and matches fail.",
   ],
+  [
+    "strict files",
+    "An unknown key in the probe file is an error that names the key. A matches pattern that is not a valid regex fails when the file is loaded.",
+  ],
+  [
+    "environment",
+    "The server only gets the SDK's small default environment plus what you list under server.env. A relative server.cwd is resolved against the probe file's directory.",
+  ],
+  ["CLI flags", "Unknown or incomplete flags exit with code 2 instead of being ignored."],
 ];
 
 const limits = [
   ["stdio only.", "No HTTP or SSE servers yet."],
   ["Tools only.", "Resources, prompts and sampling are not probed."],
-  ["Golden values compare the first text block.", "Structured output is not compared."],
+  [
+    "Golden values compare the first text block.",
+    "Other text blocks and structuredContent are not looked at.",
+  ],
   ["Not on npm.", "Clone the repo to use it."],
   [
     "Behavior, not strict conformance.",
@@ -244,6 +259,31 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        <section className="border-t border-rule py-16 md:py-24">
+          <div className={wrap}>
+            <h2 className="max-w-[40rem] font-mono text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">
+              Tested, and audited once
+            </h2>
+            <div className="mt-6 max-w-[40rem] space-y-4">
+              <p>
+                The suite has 32 tests in 3 files. It starts a small real MCP server and runs the
+                probe against it, including a server that hangs, one whose tools/list errors, one
+                that pages its tool list, and one that throws protocol errors on every call.
+              </p>
+              <p>
+                An independent audit found checks that could pass when they should fail: probe files
+                that silently dropped unknown keys, typo&rsquo;d tool names satisfying an expected
+                error, timeouts counted as expected failures, and the whole shell environment
+                leaking into the server. All four are fixed. The reasoning is in{" "}
+                <a href={`${REPO}/blob/main/docs/decisions.md`} className="link">
+                  docs/decisions.md
+                </a>
+                . An audit is not a guarantee that no others remain.
+              </p>
+            </div>
           </div>
         </section>
       </main>
