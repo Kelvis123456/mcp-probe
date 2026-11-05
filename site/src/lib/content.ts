@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 
 export const REPO = "https://github.com/Kelvis123456/mcp-probe";
-export const SITE_URL = process.env.SITE_URL ?? "http://localhost:3000";
+export const SITE_URL = process.env.SITE_URL ?? "https://kelvis-mcp-probe.vercel.app";
 
 const root = process.cwd();
 const read = (...p: string[]) => readFileSync(path.join(root, ...p), "utf8").replace(/\r\n/g, "\n");
