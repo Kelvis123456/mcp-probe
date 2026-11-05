@@ -236,4 +236,11 @@ describe("toMarkdown", () => {
     const md = toMarkdown([{ name: "x", ok: false, detail: "a|b", ms: 1 }]);
     expect(md).toContain("a\\|b");
   });
+
+  it("escapes pipes in the check name and turns newlines into <br>", () => {
+    const md = toMarkdown([{ name: "a|b\nc", ok: false, detail: "line1\r\nline2\nline3|x", ms: 1 }]);
+    const row = md.split("\n").find((l) => l.includes("**fail**"));
+    expect(row).toBe("| **fail** | a\\|b<br>c | 1 | line1<br>line2<br>line3\\|x |");
+    expect(md.split("\n").filter((l) => l.startsWith("|"))).toHaveLength(3);
+  });
 });

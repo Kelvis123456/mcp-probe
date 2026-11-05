@@ -7,9 +7,12 @@ export function toConsole(results: CheckResult[]): string {
   return lines.join("\n");
 }
 
+// A table cell must stay on one line and cannot contain a bare pipe.
+const cell = (text: string) => text.replace(/\|/g, "\\|").replace(/\r\n|\r|\n/g, "<br>");
+
 export function toMarkdown(results: CheckResult[], title = "MCP probe report"): string {
   const rows = results.map(
-    (r) => `| ${r.ok ? "pass" : "**fail**"} | ${r.name} | ${r.ms} | ${r.ok ? "" : (r.detail ?? "").replace(/\|/g, "\\|")} |`,
+    (r) => `| ${r.ok ? "pass" : "**fail**"} | ${cell(r.name)} | ${r.ms} | ${r.ok ? "" : cell(r.detail ?? "")} |`,
   );
   return [`# ${title}`, "", "| Result | Check | ms | Detail |", "| --- | --- | ---: | --- |", ...rows, ""].join("\n");
 }
